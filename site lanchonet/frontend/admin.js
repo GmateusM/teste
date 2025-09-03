@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // CONFIGURAÇÃO E VARIÁVEIS GLOBAIS
   // =================================================================================
   const API_URL = "/api";
-  // IMPORTANTE: Verifique se este nome é IDÊNTICO ao do seu painel Cloudinary (maiúsculas/minúsculas).
-  const CLOUDINARY_CLOUD_NAME = "root"; // INSIRA SEU CLOUD NAME EXATO AQUI
+  // IMPORTANTE: O seu Cloud Name correto está inserido abaixo.
+  const CLOUDINARY_CLOUD_NAME = "dhmvpgabe";
   const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
   let token = null;
@@ -131,7 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
           const response = JSON.parse(xhr.responseText);
           urlInput.value = response.secure_url;
         } else {
-          // Erro após o upload ter chegado a 100%
           const errorResponse = JSON.parse(xhr.responseText);
           throw new Error(`O Cloudinary respondeu com um erro: ${errorResponse.error.message}. Verifique o seu Cloud Name e as credenciais.`);
         }
@@ -168,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
       orderListDiv.innerHTML = "<p>Nenhum pedido registado encontrado.</p>";
       return;
     }
-    // CORRIGIDO: O código de renderização que faltava.
     orderListDiv.innerHTML = orders.map(order => `
       <div class="bg-white p-6 rounded-xl shadow-md border-l-8 border-yellow-500">
         <div class="flex flex-wrap justify-between items-start mb-4">
