@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Administrativo - TÔ COM FOME VR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="icon"
+      href="https://cdn-icons-png.flaticon.com/512/3075/3075977.png"
+      type="image/png"
+    />
+  </head>
+  <body class="bg-gray-100">
+    <header class="py-4 shadow-lg sticky top-0 z-30">
+      <div
+        class="container mx-auto flex items-center justify-between px-4 sm:px-6"
+      >
+        <div class="flex items-center space-x-4">
+          <div class="logo-circle">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png"
+              alt="Logo Tô Com Fome VR"
+            />
+          </div>
+          <h1 class="text-2xl sm:text-4xl">Painel Administrativo</h1>
+        </div>
+        <div id="admin-profile" class="hidden items-center space-x-3 text-lg">
+          <span class="hidden sm:inline"
+            >Olá, <span id="admin-name" class="font-bold"></span>!</span
+          >
+          <button
+            id="logout-btn"
+            class="font-display bg-yellow-400 text-red-800 px-3 py-1 rounded-full text-sm font-bold shadow-md hover:bg-yellow-300 transition-all"
+          >
+            Sair
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto p-8">
+      <section
+        id="product-form-container"
+        class="bg-white p-8 rounded-2xl shadow-lg border-4 border-yellow-400"
+      >
+        <h2 class="section-title !text-3xl !text-left !border-none !pb-0 mb-6">
+          Adicionar Novo Produto
+        </h2>
+        <form id="product-form" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="name" class="form-label">Nome do Produto</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-input"
+                required
+              />
+            </div>
+            <div>
+              <label for="category" class="form-label">Categoria</label>
+              <input
+                type="text"
+                id="category"
+                name="category"
+                class="form-input"
+                placeholder="Ex: 🍔 Lanches"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="price" class="form-label">Preço (Ex: 25.99)</label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                step="0.01"
+                class="form-input"
+                required
+              />
+            </div>
+            <div>
+              <label for="oldPrice" class="form-label"
+                >Preço Antigo (se em promoção)</label
+              >
+              <input
+                type="number"
+                id="oldPrice"
+                name="oldPrice"
+                step="0.01"
+                class="form-input"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="description" class="form-label">Descrição</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="3"
+              class="form-input"
+              required
+            ></textarea>
+          </div>
+
+          <div>
+            <label for="image" class="form-label">URL da Imagem</label>
+            <input
+              type="text"
+              id="image"
+              name="image"
+              class="form-input"
+              placeholder="https://i.imgur.com/imagem.png"
+              required
+            />
+          </div>
+
+          <div class="flex items-center gap-4">
+            <input
+              type="checkbox"
+              id="promo"
+              name="promo"
+              class="h-5 w-5 rounded"
+            />
+            <label for="promo" class="font-display text-red-800"
+              >Marcar como Promoção</label
+            >
+          </div>
+
+          <div class="pt-4">
+            <button type="submit" class="form-submit-btn">
+              Salvar Produto
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section class="mt-12">
+        <h2 class="section-title">Produtos Cadastrados</h2>
+        <div
+          id="product-list"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+        ></div>
+      </section>
+    </main>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

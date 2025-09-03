@@ -1,0 +1,14 @@
+# Configurações de construção do Netlify
+[build]
+  # Pasta que contém o seu site estático (HTML, CSS, JS do cliente)
+  publish = "frontend/"
+  # Pasta onde as suas funções serverless (o seu novo back-end) estarão localizadas
+  functions = "netlify/functions/"
+
+# Redirecionamento para a API
+# Isto faz com que qualquer chamada para /api/... seja direcionada para a sua pasta de funções.
+# Exemplo: uma chamada do seu JS para /api/products será redirecionada para a função .netlify/functions/products.js
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

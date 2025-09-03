@@ -1,0 +1,257 @@
+:root {
+  --primary-red: #dc2626;
+  --dark-red: #b91c1c;
+  --text-red: #7f1d1d;
+  --primary-yellow: #facc15;
+  --light-yellow: #fefce8;
+  --dark-yellow: #f59e0b;
+  --font-display: "Fredoka One", cursive;
+  --font-body: "Comic Neue", cursive;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 150px;
+}
+body {
+  font-family: var(--font-body);
+  background-color: var(--light-yellow);
+  background-image: radial-gradient(
+      var(--primary-yellow) 0.5px,
+      transparent 0.5px
+    ),
+    radial-gradient(var(--primary-yellow) 0.5px, var(--light-yellow) 0.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  color: var(--text-red);
+}
+header {
+  background: var(--primary-red);
+  color: var(--primary-yellow);
+  text-shadow: 2px 2px 0px #00000020;
+  border-bottom: 4px solid var(--dark-yellow);
+}
+header h1 {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  letter-spacing: 0.05em;
+}
+.logo-circle {
+  background: var(--primary-yellow);
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--light-yellow);
+  box-shadow: 0 4px 8px #00000030;
+  transition: transform 0.3s ease;
+}
+.logo-circle:hover {
+  transform: rotate(-15deg) scale(1.1);
+}
+#category-nav {
+  background-color: #ffffff;
+  border-bottom: 3px dashed var(--dark-yellow);
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 85px;
+  z-index: 20;
+}
+.category-btn {
+  font-family: var(--font-display);
+  background-color: var(--primary-yellow);
+  color: var(--text-red);
+  border: 2px solid var(--dark-red);
+  transition: all 0.2s ease-in-out;
+  flex-shrink: 0;
+}
+.category-btn:hover,
+.category-btn:focus {
+  background-color: var(--dark-yellow);
+  color: white;
+  transform: scale(1.05);
+  outline: 2px solid white;
+}
+h2.section-title {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  color: var(--dark-red);
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+h2.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 5px;
+  background: var(--primary-yellow);
+  border-radius: 5px;
+  border: 2px solid var(--dark-red);
+}
+button {
+  cursor: pointer;
+}
+button:focus,
+input:focus,
+a:focus {
+  outline: 2px solid var(--dark-yellow);
+  outline-offset: 2px;
+}
+.hidden {
+  display: none;
+}
+
+/* ESTILOS PARA MODAIS DE AUTENTICAÇÃO */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 50;
+  transition: opacity 0.3s ease;
+}
+.modal-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--light-yellow);
+  border: 4px solid var(--dark-yellow);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  z-index: 60;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.modal-container.hidden {
+  transform: translate(-50%, -40%);
+  opacity: 0;
+  pointer-events: none;
+}
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  color: var(--text-red);
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+.modal-close-btn:hover {
+  transform: scale(1.2);
+}
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--dark-yellow);
+  border-radius: 0.5rem;
+  font-family: var(--font-body);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+.form-label {
+  font-family: var(--font-display);
+  color: var(--text-red);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.form-submit-btn {
+  width: 100%;
+  background-color: var(--primary-red);
+  color: var(--primary-yellow);
+  font-family: var(--font-display);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1.2rem;
+  transition: background-color 0.2s;
+  border-bottom: 4px solid var(--dark-red);
+}
+.form-submit-btn:hover {
+  background-color: var(--dark-red);
+}
+.form-switch-link {
+  color: var(--dark-red);
+  text-decoration: underline;
+  font-weight: bold;
+}
+.error-message {
+  background-color: #fecaca;
+  border: 1px solid #dc2626;
+  color: #991b1b;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* ESTILOS PARA PERFIL DO USUÁRIO */
+#user-profile {
+  font-family: var(--font-display);
+}
+#logout-btn {
+  background: var(--dark-yellow);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 0.8rem;
+  border: 2px solid white;
+  transition: all 0.2s;
+}
+#logout-btn:hover {
+  background: var(--primary-yellow);
+  color: var(--dark-red);
+}
+
+/* ESTILOS CARTÃO FIDELIDADE */
+#loyalty-stamps .stamp {
+  width: 40px;
+  height: 40px;
+  background-color: #fefce8;
+  border: 2px dashed var(--dark-yellow);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fbbf24;
+  transition: all 0.3s ease;
+}
+#loyalty-stamps .stamp.stamped {
+  background-color: var(--primary-yellow);
+  border-style: solid;
+  border-color: var(--dark-red);
+  color: var(--dark-red);
+  transform: scale(1.1);
+}
+#loyalty-stamps .stamp.stamped i {
+  animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+@keyframes popIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

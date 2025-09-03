@@ -1,0 +1,19 @@
+{
+  "name": "tocomfome-vr-netlify",
+  "version": "1.0.0",
+  "description": "Aplicação full-stack com front-end e Netlify Functions.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "author": "prog",
+  "license": "ISC",
+  "dependencies": {
+    "@netlify/neon": "^0.3.0",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}
