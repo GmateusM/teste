@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // CONFIGURAÇÃO E VARIÁVEIS GLOBAIS
   // =================================================================================
   const API_URL = "/api";
-  const CLOUDINARY_CLOUD_NAME = "dookb2qlb"; // INSIRA SEU CLOUD NAME AQUI
+  const CLOUDINARY_CLOUD_NAME = "Root";
   const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
   let token = null;
@@ -300,3 +300,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   checkAdminAuth();
 });
+
