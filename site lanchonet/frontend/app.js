@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const userProfileDiv = document.getElementById("user-profile");
   const userNameSpan = document.getElementById("user-name");
   const logoutBtn = document.getElementById("logout-btn");
-  const adminPanelBtn = document.getElementById("admin-panel-btn"); // ADICIONADO: Seletor para o novo botão do painel
+  const adminPanelBtn = document.getElementById("admin-panel-btn");
   const modalBackdrop = document.getElementById("modal-backdrop");
   const loginModal = document.getElementById("login-modal");
   const registerModal = document.getElementById("register-modal");
@@ -152,7 +152,6 @@ document.addEventListener("DOMContentLoaded", () => {
     userNameSpan.textContent = user.name.split(" ")[0];
     renderLoyaltyCard(user.loyalty_stamps);
 
-    // ADICIONADO: Mostra o botão do painel admin se o utilizador for admin
     if (user.is_admin) {
       adminPanelBtn.classList.remove("hidden");
     }
@@ -163,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
     userProfileDiv.classList.add("hidden");
     userNameSpan.textContent = "";
     loyaltyCardContainer.classList.add("hidden");
-    // ADICIONADO: Garante que o botão do painel admin fica escondido ao sair
     adminPanelBtn.classList.add("hidden");
   };
 
@@ -183,14 +181,12 @@ document.addEventListener("DOMContentLoaded", () => {
     categoryButtonsContainer.innerHTML = "";
 
     for (const category in productsByCategory) {
-      // Cria o botão da categoria
       const categoryButton = document.createElement("a");
       categoryButton.href = `#category-${category.replace(/\s+/g, "-")}`;
       categoryButton.className = "category-btn py-2 px-4 rounded-full text-sm";
       categoryButton.textContent = category;
       categoryButtonsContainer.appendChild(categoryButton);
 
-      // Cria a seção da categoria
       const categorySection = document.createElement("div");
       categorySection.id = `category-${category.replace(/\s+/g, "-")}`;
       categorySection.innerHTML = `<h2 class="section-title">${category}</h2>`;
@@ -199,7 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8";
       categorySection.appendChild(productsGrid);
 
-      // Adiciona os produtos na seção
       productsByCategory[category].forEach((product) => {
         const productCard = document.createElement("product-card");
         productCard.setAttribute("id", product.id);
@@ -272,34 +267,22 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="flex justify-between items-center bg-white p-3 rounded-lg shadow-sm">
                 <div>
                     <p class="font-bold text-red-800">${item.name}</p>
-                    <p class="text-sm text-gray-600">R$ ${item.price.toFixed(
-                      2
-                    )}</p>
+                    <p class="text-sm text-gray-600">R$ ${item.price.toFixed(2)}</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button class="quantity-change bg-gray-200 w-6 h-6 rounded-full font-bold" data-id="${
-                      item.id
-                    }" data-change="-1">-</button>
+                    <button class="quantity-change bg-gray-200 w-6 h-6 rounded-full font-bold" data-id="${item.id}" data-change="-1">-</button>
                     <span>${item.quantity}</span>
-                    <button class="quantity-change bg-gray-200 w-6 h-6 rounded-full font-bold" data-id="${
-                      item.id
-                    }" data-change="1">+</button>
-                    <button class="remove-item text-red-500 hover:text-red-700 ml-2" data-id="${
-                      item.id
-                    }"><i class="fas fa-trash"></i></button>
+                    <button class="quantity-change bg-gray-200 w-6 h-6 rounded-full font-bold" data-id="${item.id}" data-change="1">+</button>
+                    <button class="remove-item text-red-500 hover:text-red-700 ml-2" data-id="${item.id}"><i class="fas fa-trash"></i></button>
                 </div>
-            </div>
-        `
+            </div>`
         )
         .join("");
     }
   };
 
   const updateCartTotal = () => {
-    const total = cart.reduce(
-      (acc, item) => acc + item.price * item.quantity,
-      0
-    );
+    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     cartTotalSpan.textContent = `R$ ${total.toFixed(2).replace(".", ",")}`;
   };
 
@@ -347,14 +330,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let message = "*🍔 NOVO PEDIDO TÔ COM FOME VR 🍔*\n\n";
     message += "*Itens do Pedido:*\n";
     cart.forEach((item) => {
-      message += `▪️ ${item.quantity}x ${
-        item.name
-      } - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
+      message += `▪️ ${item.quantity}x ${item.name} - R$ ${(item.price * item.quantity).toFixed(2)}\n`;
     });
     message += "\n";
-    const total = cart
-      .reduce((acc, item) => acc + item.price * item.quantity, 0)
-      .toFixed(2);
+    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
     message += `*Total: R$ ${total}*\n\n`;
     message += `*Endereço de Entrega:*\n${addressInput.value.trim()}\n\n`;
     if (user) {
@@ -367,37 +346,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const handleCheckout = async () => {
     if (user) {
-      // Cliente logado: salva no banco e abre o WhatsApp
       try {
         const orderData = {
           items: cart,
-          total: cart.reduce(
-            (acc, item) => acc + item.price * item.quantity,
-            0
-          ),
+          total: cart.reduce((acc, item) => acc + item.price * item.quantity, 0),
           address: addressInput.value.trim(),
         };
         const result = await apiFetch("/orders", {
           method: "POST",
           body: JSON.stringify(orderData),
         });
-        // Atualiza o cartão de fidelidade na tela
         renderLoyaltyCard(result.loyalty.newStampCount);
-        showToast(
-          result.loyalty.rewardMessage || "Pedido registado e selo ganho!",
-          "success"
-        );
+        showToast(result.loyalty.rewardMessage || "Pedido registado e selo ganho!", "success");
       } catch (error) {
+        // VERSÃO MELHORADA: Mostra a mensagem de erro detalhada vinda do backend
         showToast(`Erro ao registar o pedido: ${error.message}`, "error");
+        // Não continua para o WhatsApp se o registo falhar
+        return; 
       }
     }
-    // Para todos os casos (logado ou não), abre o WhatsApp
+    
     const whatsappMessage = formatOrderForWhatsApp();
-    window.open(
-      `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`,
-      "_blank"
-    );
-    // Limpa o carrinho e fecha a modal após o pedido
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`, "_blank");
+    
     cart = [];
     addressInput.value = "";
     updateCart();
@@ -424,7 +395,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(() => {
       toast.classList.add("translate-y-20", "opacity-0");
-      setTimeout(() => toast.remove(), 300);
+      setTimeout(() => toast.remove(), 4000);
     }, 4000);
   };
 
@@ -444,12 +415,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Listeners para Modais de Autenticação
   loginBtn.addEventListener("click", () => toggleModal("login-modal", true));
-  closeLoginModalBtn.addEventListener("click", () =>
-    toggleModal("login-modal", false)
-  );
-  closeRegisterModalBtn.addEventListener("click", () =>
-    toggleModal("register-modal", false)
-  );
+  closeLoginModalBtn.addEventListener("click", () => toggleModal("login-modal", false));
+  closeRegisterModalBtn.addEventListener("click", () => toggleModal("register-modal", false));
   switchToRegisterLink.addEventListener("click", (e) => {
     e.preventDefault();
     toggleModal("login-modal", false);
@@ -508,9 +475,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Listeners para Modal de Checkout de Convidado
-  closeGuestModalBtn.addEventListener("click", () =>
-    toggleModal("guest-checkout-modal", false)
-  );
+  closeGuestModalBtn.addEventListener("click", () => toggleModal("guest-checkout-modal", false));
   promptLoginBtn.addEventListener("click", () => {
     toggleModal("guest-checkout-modal", false);
     toggleModal("login-modal", true);
