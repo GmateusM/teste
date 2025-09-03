@@ -26,12 +26,12 @@
         class="container mx-auto flex items-center justify-between px-4 sm:px-6"
       >
         <div class="flex items-center space-x-4">
-          <div class="logo-circle">
+          <a href="index.html" class="logo-circle">
             <img
               src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png"
               alt="Logo Tô Com Fome VR"
             />
-          </div>
+          </a>
           <h1 class="text-2xl sm:text-4xl">Painel Administrativo</h1>
         </div>
         <div id="admin-profile" class="hidden items-center space-x-3 text-lg">
@@ -80,7 +80,6 @@
               />
             </div>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label for="price" class="form-label">Preço (Ex: 25.99)</label>
@@ -106,7 +105,6 @@
               />
             </div>
           </div>
-
           <div>
             <label for="description" class="form-label">Descrição</label>
             <textarea
@@ -117,7 +115,6 @@
               required
             ></textarea>
           </div>
-
           <div>
             <label for="image" class="form-label">URL da Imagem</label>
             <input
@@ -129,7 +126,6 @@
               required
             />
           </div>
-
           <div class="flex items-center gap-4">
             <input
               type="checkbox"
@@ -141,10 +137,9 @@
               >Marcar como Promoção</label
             >
           </div>
-
           <div class="pt-4">
             <button type="submit" class="form-submit-btn">
-              Salvar Produto
+              Adicionar Produto
             </button>
           </div>
         </form>
@@ -155,9 +150,106 @@
         <div
           id="product-list"
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-        ></div>
+        >
+          </div>
       </section>
     </main>
+
+    <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+    <div id="edit-modal" class="modal-container hidden w-full max-w-2xl">
+      <button
+        id="close-edit-modal-btn"
+        class="modal-close-btn"
+        aria-label="Fechar"
+      >
+        &times;
+      </button>
+      <h2 class="section-title !text-3xl !text-left !border-none !pb-0 mb-6">
+        Editar Produto
+      </h2>
+      <form id="edit-product-form" class="space-y-4">
+        <input type="hidden" id="edit-product-id" />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="edit-name" class="form-label">Nome do Produto</label>
+            <input
+              type="text"
+              id="edit-name"
+              name="name"
+              class="form-input"
+              required
+            />
+          </div>
+          <div>
+            <label for="edit-category" class="form-label">Categoria</label>
+            <input
+              type="text"
+              id="edit-category"
+              name="category"
+              class="form-input"
+              required
+            />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="edit-price" class="form-label">Preço</label>
+            <input
+              type="number"
+              id="edit-price"
+              name="price"
+              step="0.01"
+              class="form-input"
+              required
+            />
+          </div>
+          <div>
+            <label for="edit-oldPrice" class="form-label">Preço Antigo</label>
+            <input
+              type="number"
+              id="edit-oldPrice"
+              name="oldPrice"
+              step="0.01"
+              class="form-input"
+            />
+          </div>
+        </div>
+        <div>
+          <label for="edit-description" class="form-label">Descrição</label>
+          <textarea
+            id="edit-description"
+            name="description"
+            rows="3"
+            class="form-input"
+            required
+          ></textarea>
+        </div>
+        <div>
+          <label for="edit-image" class="form-label">URL da Imagem</label>
+          <input
+            type="text"
+            id="edit-image"
+            name="image"
+            class="form-input"
+            required
+          />
+        </div>
+        <div class="flex items-center gap-4">
+          <input
+            type="checkbox"
+            id="edit-promo"
+            name="promo"
+            class="h-5 w-5 rounded"
+          />
+          <label for="edit-promo" class="font-display text-red-800"
+            >Marcar como Promoção</label
+          >
+        </div>
+        <div class="pt-4">
+          <button type="submit" class="form-submit-btn">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
 
     <script src="admin.js"></script>
   </body>
