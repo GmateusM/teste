@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const userProfileDiv = document.getElementById("user-profile");
   const userNameSpan = document.getElementById("user-name");
   const logoutBtn = document.getElementById("logout-btn");
+  const adminPanelBtn = document.getElementById("admin-panel-btn"); // ADICIONADO: Seletor para o novo botão do painel
   const modalBackdrop = document.getElementById("modal-backdrop");
   const loginModal = document.getElementById("login-modal");
   const registerModal = document.getElementById("register-modal");
@@ -150,6 +151,11 @@ document.addEventListener("DOMContentLoaded", () => {
     userProfileDiv.classList.add("flex");
     userNameSpan.textContent = user.name.split(" ")[0];
     renderLoyaltyCard(user.loyalty_stamps);
+
+    // ADICIONADO: Mostra o botão do painel admin se o utilizador for admin
+    if (user.is_admin) {
+      adminPanelBtn.classList.remove("hidden");
+    }
   };
 
   const updateUIAfterLogout = () => {
@@ -157,6 +163,8 @@ document.addEventListener("DOMContentLoaded", () => {
     userProfileDiv.classList.add("hidden");
     userNameSpan.textContent = "";
     loyaltyCardContainer.classList.add("hidden");
+    // ADICIONADO: Garante que o botão do painel admin fica escondido ao sair
+    adminPanelBtn.classList.add("hidden");
   };
 
   const toggleModal = (modalId, show) => {
