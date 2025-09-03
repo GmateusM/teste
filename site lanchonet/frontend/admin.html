@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF--8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Painel Administrativo - TÔ COM FOME VR</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,6 +19,12 @@
       href="https://cdn-icons-png.flaticon.com/512/3075/3075977.png"
       type="image/png"
     />
+    <style>
+      /* Estilo para a barra de progresso do upload */
+      .progress-bar {
+        transition: width 0.3s ease;
+      }
+    </style>
   </head>
   <body class="bg-gray-100">
     <header class="py-4 shadow-lg sticky top-0 z-30">
@@ -57,6 +63,7 @@
           Adicionar Novo Produto
         </h2>
         <form id="product-form" class="space-y-4">
+          <input type="hidden" id="image-url" name="image" />
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label for="name" class="form-label">Nome do Produto</label>
@@ -115,17 +122,57 @@
               required
             ></textarea>
           </div>
+
           <div>
-            <label for="image" class="form-label">URL da Imagem</label>
-            <input
-              type="text"
-              id="image"
-              name="image"
-              class="form-input"
-              placeholder="https://i.imgur.com/imagem.png"
-              required
-            />
+            <label class="form-label">Imagem do Produto</label>
+            <div
+              class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10"
+            >
+              <div id="image-upload-container" class="text-center">
+                <img
+                  id="image-preview"
+                  src=""
+                  alt="Pré-visualização"
+                  class="hidden mx-auto h-32 w-auto mb-4"
+                />
+                <div id="image-upload-placeholder">
+                  <i class="fa-solid fa-photo-film text-4xl text-gray-400"></i>
+                  <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                    <label
+                      for="file-upload"
+                      class="relative cursor-pointer rounded-md bg-white font-semibold text-red-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-red-600 focus-within:ring-offset-2 hover:text-red-500"
+                    >
+                      <span>Carregar um ficheiro</span>
+                      <input
+                        id="file-upload"
+                        name="file-upload"
+                        type="file"
+                        class="sr-only"
+                        accept="image/png, image/jpeg, image/webp"
+                      />
+                    </label>
+                    <p class="pl-1">ou arraste e solte</p>
+                  </div>
+                  <p class="text-xs leading-5 text-gray-600">
+                    PNG, JPG, WEBP até 10MB
+                  </p>
+                </div>
+                <div
+                  id="upload-progress-container"
+                  class="hidden w-full bg-gray-200 rounded-full mt-4"
+                >
+                  <div
+                    id="upload-progress-bar"
+                    class="progress-bar bg-red-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
+                    style="width: 0%"
+                  >
+                    0%
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
           <div class="flex items-center gap-4">
             <input
               type="checkbox"
@@ -147,8 +194,7 @@
 
       <section id="order-history-container" class="mt-12">
         <h2 class="section-title">Histórico de Pedidos</h2>
-        <div id="order-list" class="space-y-6">
-          </div>
+        <div id="order-list" class="space-y-6"></div>
       </section>
 
       <section class="mt-12">
@@ -156,8 +202,7 @@
         <div
           id="product-list"
           class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-        >
-          </div>
+        ></div>
       </section>
     </main>
 
@@ -175,81 +220,49 @@
       </h2>
       <form id="edit-product-form" class="space-y-4">
         <input type="hidden" id="edit-product-id" />
+        <input type="hidden" id="edit-image-url" name="image" />
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label for="edit-name" class="form-label">Nome do Produto</label>
-            <input
-              type="text"
-              id="edit-name"
-              name="name"
-              class="form-input"
-              required
-            />
+            <input type="text" id="edit-name" name="name" class="form-input" required />
           </div>
           <div>
             <label for="edit-category" class="form-label">Categoria</label>
-            <input
-              type="text"
-              id="edit-category"
-              name="category"
-              class="form-input"
-              required
-            />
+            <input type="text" id="edit-category" name="category" class="form-input" required />
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label for="edit-price" class="form-label">Preço</label>
-            <input
-              type="number"
-              id="edit-price"
-              name="price"
-              step="0.01"
-              class="form-input"
-              required
-            />
+            <input type="number" id="edit-price" name="price" step="0.01" class="form-input" required />
           </div>
           <div>
             <label for="edit-oldPrice" class="form-label">Preço Antigo</label>
-            <input
-              type="number"
-              id="edit-oldPrice"
-              name="oldPrice"
-              step="0.01"
-              class="form-input"
-            />
+            <input type="number" id="edit-oldPrice" name="oldPrice" step="0.01" class="form-input" />
           </div>
         </div>
         <div>
           <label for="edit-description" class="form-label">Descrição</label>
-          <textarea
-            id="edit-description"
-            name="description"
-            rows="3"
-            class="form-input"
-            required
-          ></textarea>
+          <textarea id="edit-description" name="description" rows="3" class="form-input" required></textarea>
         </div>
+
         <div>
-          <label for="edit-image" class="form-label">URL da Imagem</label>
-          <input
-            type="text"
-            id="edit-image"
-            name="image"
-            class="form-input"
-            required
-          />
+          <label class="form-label">Imagem do Produto</label>
+          <div class="mt-2 flex items-center gap-x-3">
+            <img id="edit-image-preview" src="" alt="Pré-visualização" class="h-24 w-auto bg-gray-100 rounded" />
+            <label for="edit-file-upload" class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 cursor-pointer">
+              <span>Alterar imagem</span>
+              <input id="edit-file-upload" name="edit-file-upload" type="file" class="sr-only" accept="image/png, image/jpeg, image/webp" />
+            </label>
+          </div>
+           <div id="edit-upload-progress-container" class="hidden w-full bg-gray-200 rounded-full mt-2">
+              <div id="edit-upload-progress-bar" class="progress-bar bg-red-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 0%">0%</div>
+            </div>
         </div>
+
         <div class="flex items-center gap-4">
-          <input
-            type="checkbox"
-            id="edit-promo"
-            name="promo"
-            class="h-5 w-5 rounded"
-          />
-          <label for="edit-promo" class="font-display text-red-800"
-            >Marcar como Promoção</label
-          >
+          <input type="checkbox" id="edit-promo" name="promo" class="h-5 w-5 rounded" />
+          <label for="edit-promo" class="font-display text-red-800">Marcar como Promoção</label>
         </div>
         <div class="pt-4">
           <button type="submit" class="form-submit-btn">Salvar Alterações</button>
