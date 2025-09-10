@@ -9,6 +9,26 @@ const generateToken = (id) => {
   });
 };
 
+// Função auxiliar para validar dados de registo
+const validateRegisterInput = (data) => {
+    const { name, phone, password } = data;
+    // Validação do nome
+    if (!name || typeof name !== 'string' || name.trim().length < 2) {
+        throw { message: "O nome é inválido.", status: 400 };
+    }
+    // Validação do telefone (apenas números, entre 10 e 11 dígitos)
+    const phoneRegex = /^[0-9]{10,11}$/;
+    if (!phone || typeof phone !== 'string' || !phoneRegex.test(phone)) {
+        throw { message: "O telefone deve conter apenas números (DDD + número).", status: 400 };
+    }
+    // Validação da senha
+    if (!password || typeof password !== 'string' || password.length < 6) {
+        throw { message: "A senha deve ter no mínimo 6 caracteres.", status: 400 };
+    }
+    return true;
+}
+
+
 export default async (req, context) => {
   // Se o método não for POST, recusa a requisição
   if (req.method !== "POST") {
@@ -26,12 +46,8 @@ export default async (req, context) => {
     if (action === "register") {
       const { name, phone, password } = body;
 
-      // Validação básica
-      if (!name || !phone || !password) {
-        return new Response(JSON.stringify({ message: "Dados incompletos." }), {
-          status: 400,
-        });
-      }
+      // Validação dos dados recebidos
+      validateRegisterInput({ name, phone, password });
 
       // Verifica se o utilizador já existe
       const [existingUser] =
@@ -41,7 +57,7 @@ export default async (req, context) => {
           JSON.stringify({
             message: "Um utilizador com este telefone já existe.",
           }),
-          { status: 400 }
+          { status: 409 } // 409 Conflict é mais apropriado aqui
         );
       }
 
@@ -52,7 +68,7 @@ export default async (req, context) => {
       // Insere o novo utilizador no banco de dados
       const [newUser] = await sql`
         INSERT INTO users (name, phone, password)
-        VALUES (${name}, ${phone}, ${hashedPassword})
+        VALUES (${name.trim()}, ${phone}, ${hashedPassword})
         RETURNING id, name, phone, loyalty_stamps, is_admin;
       `;
 
@@ -69,7 +85,7 @@ export default async (req, context) => {
       const { phone, password } = body;
 
       if (!phone || !password) {
-        return new Response(JSON.stringify({ message: "Dados incompletos." }), {
+        return new Response(JSON.stringify({ message: "Telefone e senha são obrigatórios." }), {
           status: 400,
         });
       }
@@ -101,7 +117,12 @@ export default async (req, context) => {
       status: 400,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Erro na função auth.js:", error);
+    // Retorna erro de validação personalizado
+    if (error.status) {
+        return new Response(JSON.stringify({ message: error.message }), { status: error.status });
+    }
+    // Retorna erro genérico
     return new Response(
       JSON.stringify({ message: "Erro interno do servidor." }),
       { status: 500 }
