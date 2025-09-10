@@ -75,6 +75,7 @@ header h1 {
   border: 2px solid var(--dark-red);
   transition: all 0.2s ease-in-out;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 .category-btn:hover,
 .category-btn:focus {
@@ -104,20 +105,21 @@ h2.section-title::after {
   border-radius: 5px;
   border: 2px solid var(--dark-red);
 }
-button {
+button, select {
   cursor: pointer;
 }
 button:focus,
 input:focus,
-a:focus {
+a:focus,
+select:focus {
   outline: 2px solid var(--dark-yellow);
   outline-offset: 2px;
 }
 .hidden {
-  display: none;
+  display: none !important;
 }
 
-/* ESTILOS PARA MODAIS DE AUTENTICAÇÃO */
+/* ESTILOS PARA MODAIS */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -185,8 +187,12 @@ a:focus {
   transition: background-color 0.2s;
   border-bottom: 4px solid var(--dark-red);
 }
-.form-submit-btn:hover {
+.form-submit-btn:hover:not(:disabled) {
   background-color: var(--dark-red);
+}
+.form-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 .form-switch-link {
   color: var(--dark-red);
@@ -204,21 +210,25 @@ a:focus {
   font-size: 0.9rem;
 }
 
-/* ESTILOS PARA PERFIL DO USUÁRIO */
-#user-profile {
+/* ESTILOS PERFIL/ADMIN */
+#user-profile button {
+  transition: transform 0.2s;
+}
+#user-profile button:hover {
+    transform: scale(1.1);
+}
+#admin-tabs .tab-btn {
   font-family: var(--font-display);
+  padding: 1rem 0.5rem;
+  border-bottom: 4px solid transparent;
+  color: #a16207;
+  font-size: 1.1rem;
 }
-#logout-btn {
-  background: var(--dark-yellow);
-  color: white;
-  padding: 6px 12px;
-  border-radius: 99px;
-  font-size: 0.8rem;
-  border: 2px solid white;
-  transition: all 0.2s;
+#admin-tabs .tab-btn.active-tab {
+  border-color: var(--primary-red);
+  color: var(--primary-red);
 }
-#logout-btn:hover {
-  background: var(--primary-yellow);
+#admin-tabs .tab-btn:hover:not(.active-tab) {
   color: var(--dark-red);
 }
 
