@@ -20,9 +20,20 @@
       type="image/png"
     />
     <style>
-      /* Estilo para a barra de progresso do upload */
       .progress-bar {
         transition: width 0.3s ease;
+      }
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #dc2626;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
       }
     </style>
   </head>
@@ -55,155 +66,138 @@
     </header>
 
     <main class="container mx-auto p-8">
-      <section
-        id="product-form-container"
-        class="bg-white p-8 rounded-2xl shadow-lg border-4 border-yellow-400"
-      >
-        <h2 class="section-title !text-3xl !text-left !border-none !pb-0 mb-6">
-          Adicionar Novo Produto
-        </h2>
-        <form id="product-form" class="space-y-4">
-          <input type="hidden" id="image-url" name="image" />
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label for="name" class="form-label">Nome do Produto</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                class="form-input"
-                required
-              />
-            </div>
-            <div>
-              <label for="category" class="form-label">Categoria</label>
-              <input
-                type="text"
-                id="category"
-                name="category"
-                class="form-input"
-                placeholder="Ex: 🍔 Lanches"
-                required
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label for="price" class="form-label">Preço (Ex: 25.99)</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                step="0.01"
-                class="form-input"
-                required
-              />
-            </div>
-            <div>
-              <label for="oldPrice" class="form-label"
-                >Preço Antigo (se em promoção)</label
-              >
-              <input
-                type="number"
-                id="oldPrice"
-                name="oldPrice"
-                step="0.01"
-                class="form-input"
-              />
-            </div>
-          </div>
-          <div>
-            <label for="description" class="form-label">Descrição</label>
-            <textarea
-              id="description"
-              name="description"
-              rows="3"
-              class="form-input"
-              required
-            ></textarea>
-          </div>
 
-          <div>
-            <label class="form-label">Imagem do Produto</label>
-            <div
-              class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10"
-            >
-              <div id="image-upload-container" class="text-center">
-                <img
-                  id="image-preview"
-                  src=""
-                  alt="Pré-visualização"
-                  class="hidden mx-auto h-32 w-auto mb-4"
-                />
-                <div id="image-upload-placeholder">
-                  <i class="fa-solid fa-photo-film text-4xl text-gray-400"></i>
-                  <div class="mt-4 flex text-sm leading-6 text-gray-600">
-                    <label
-                      for="file-upload"
-                      class="relative cursor-pointer rounded-md bg-white font-semibold text-red-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-red-600 focus-within:ring-offset-2 hover:text-red-500"
-                    >
-                      <span>Carregar um ficheiro</span>
-                      <input
-                        id="file-upload"
-                        name="file-upload"
-                        type="file"
-                        class="sr-only"
-                        accept="image/png, image/jpeg, image/webp"
-                      />
-                    </label>
-                    <p class="pl-1">ou arraste e solte</p>
-                  </div>
-                  <p class="text-xs leading-5 text-gray-600">
-                    PNG, JPG, WEBP até 10MB
-                  </p>
-                </div>
-                <div
-                  id="upload-progress-container"
-                  class="hidden w-full bg-gray-200 rounded-full mt-4"
-                >
-                  <div
-                    id="upload-progress-bar"
-                    class="progress-bar bg-red-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full"
-                    style="width: 0%"
-                  >
-                    0%
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <input
-              type="checkbox"
-              id="promo"
-              name="promo"
-              class="h-5 w-5 rounded"
-            />
-            <label for="promo" class="font-display text-red-800"
-              >Marcar como Promoção</label
-            >
-          </div>
-          <div class="pt-4">
-            <button type="submit" class="form-submit-btn">
-              Adicionar Produto
+      <div class="mb-8">
+        <div class="border-b border-gray-200">
+          <nav id="admin-tabs" class="-mb-px flex space-x-8" aria-label="Tabs">
+            <button data-tab="products" class="tab-btn active-tab">
+              <i class="fa-solid fa-burger mr-2"></i>
+              <span>Produtos</span>
             </button>
-          </div>
-        </form>
-      </section>
+            <button data-tab="categories" class="tab-btn">
+               <i class="fa-solid fa-tags mr-2"></i>
+              <span>Categorias</span>
+            </button>
+            <button data-tab="orders" class="tab-btn">
+              <i class="fa-solid fa-receipt mr-2"></i>
+              <span>Pedidos</span>
+            </button>
+          </nav>
+        </div>
+      </div>
 
-      <section id="order-history-container" class="mt-12">
-        <h2 class="section-title">Histórico de Pedidos</h2>
-        <div id="order-list" class="space-y-6"></div>
-      </section>
+      <div id="tab-content">
+        <div id="products-tab-content" class="tab-panel">
+            <section
+              id="product-form-container"
+              class="bg-white p-8 rounded-2xl shadow-lg border-4 border-yellow-400 mb-12"
+            >
+              <h2 class="section-title !text-3xl !text-left !border-none !pb-0 mb-6">
+                Adicionar Novo Produto
+              </h2>
+              <form id="product-form" class="space-y-4">
+                <input type="hidden" id="image-url" name="image" />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label for="name" class="form-label">Nome do Produto</label>
+                    <input type="text" id="name" name="name" class="form-input" required />
+                  </div>
+                  <div>
+                    <label for="category" class="form-label">Categoria</label>
+                    <select id="category" name="category_id" class="form-input" required>
+                      <option value="">Selecione uma categoria...</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label for="price" class="form-label">Preço (Ex: 25.99)</label>
+                    <input type="number" id="price" name="price" step="0.01" class="form-input" required />
+                  </div>
+                  <div>
+                    <label for="oldPrice" class="form-label">Preço Antigo (se em promoção)</label>
+                    <input type="number" id="oldPrice" name="oldPrice" step="0.01" class="form-input" />
+                  </div>
+                </div>
+                <div>
+                  <label for="description" class="form-label">Descrição</label>
+                  <textarea id="description" name="description" rows="3" class="form-input" required></textarea>
+                </div>
+                <div>
+                  <label class="form-label">Imagem do Produto</label>
+                  <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                    <div id="image-upload-container" class="text-center">
+                      <img id="image-preview" src="" alt="Pré-visualização" class="hidden mx-auto h-32 w-auto mb-4" />
+                      <div id="image-upload-placeholder">
+                        <i class="fa-solid fa-photo-film text-4xl text-gray-400"></i>
+                        <div class="mt-4 flex text-sm leading-6 text-gray-600">
+                          <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-red-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-red-600 focus-within:ring-offset-2 hover:text-red-500">
+                            <span>Carregar um ficheiro</span>
+                            <input id="file-upload" name="file-upload" type="file" class="sr-only" accept="image/png, image/jpeg, image/webp" />
+                          </label>
+                          <p class="pl-1">ou arraste e solte</p>
+                        </div>
+                        <p class="text-xs leading-5 text-gray-600">PNG, JPG, WEBP até 10MB</p>
+                      </div>
+                      <div id="upload-progress-container" class="hidden w-full bg-gray-200 rounded-full mt-4">
+                        <div id="upload-progress-bar" class="progress-bar bg-red-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 0%">0%</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex items-center gap-4">
+                  <input type="checkbox" id="promo" name="promo" class="h-5 w-5 rounded" />
+                  <label for="promo" class="font-display text-red-800">Marcar como Promoção</label>
+                </div>
+                <div class="pt-4">
+                  <button type="submit" class="form-submit-btn flex items-center justify-center gap-3">
+                    <span class="btn-text">Adicionar Produto</span>
+                    <div class="loader hidden"></div>
+                  </button>
+                </div>
+              </form>
+            </section>
+            <section>
+              <h2 class="section-title">Produtos Cadastrados</h2>
+              <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+            </section>
+        </div>
 
-      <section class="mt-12">
-        <h2 class="section-title">Produtos Cadastrados</h2>
-        <div
-          id="product-list"
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-        ></div>
-      </section>
+        <div id="categories-tab-content" class="tab-panel hidden">
+            <section id="category-form-container" class="bg-white p-8 rounded-2xl shadow-lg border-4 border-yellow-400 mb-12">
+              <h2 class="section-title !text-3xl !text-left !border-none !pb-0 mb-6">Adicionar Nova Categoria</h2>
+              <form id="category-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label for="category-name" class="form-label">Nome da Categoria</label>
+                    <input type="text" id="category-name" name="name" class="form-input" placeholder="Ex: Bebidas" required />
+                  </div>
+                   <div>
+                    <label for="category-order" class="form-label">Ordem de Exibição</label>
+                    <input type="number" id="category-order" name="display_order" class="form-input" placeholder="0" value="0" required />
+                  </div>
+                </div>
+                <div class="pt-4">
+                  <button type="submit" class="form-submit-btn flex items-center justify-center gap-3">
+                    <span class="btn-text">Adicionar Categoria</span>
+                    <div class="loader hidden"></div>
+                  </button>
+                </div>
+              </form>
+            </section>
+            <section>
+              <h2 class="section-title">Categorias Cadastradas</h2>
+              <div id="category-list" class="space-y-4"></div>
+            </section>
+        </div>
+        
+        <div id="orders-tab-content" class="tab-panel hidden">
+            <section id="order-history-container">
+              <h2 class="section-title">Histórico de Pedidos</h2>
+              <div id="order-list" class="space-y-6"></div>
+            </section>
+        </div>
+      </div>
     </main>
 
     <div id="modal-backdrop" class="modal-backdrop hidden"></div>
@@ -228,7 +222,7 @@
           </div>
           <div>
             <label for="edit-category" class="form-label">Categoria</label>
-            <input type="text" id="edit-category" name="category" class="form-input" required />
+            <select id="edit-category" name="category_id" class="form-input" required></select>
           </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -245,7 +239,6 @@
           <label for="edit-description" class="form-label">Descrição</label>
           <textarea id="edit-description" name="description" rows="3" class="form-input" required></textarea>
         </div>
-
         <div>
           <label class="form-label">Imagem do Produto</label>
           <div class="mt-2 flex items-center gap-x-3">
@@ -259,13 +252,15 @@
               <div id="edit-upload-progress-bar" class="progress-bar bg-red-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 0%">0%</div>
             </div>
         </div>
-
         <div class="flex items-center gap-4">
           <input type="checkbox" id="edit-promo" name="promo" class="h-5 w-5 rounded" />
           <label for="edit-promo" class="font-display text-red-800">Marcar como Promoção</label>
         </div>
         <div class="pt-4">
-          <button type="submit" class="form-submit-btn">Salvar Alterações</button>
+          <button type="submit" class="form-submit-btn flex items-center justify-center gap-3">
+             <span class="btn-text">Salvar Alterações</span>
+             <div class="loader hidden"></div>
+          </button>
         </div>
       </form>
     </div>
