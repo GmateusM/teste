@@ -24,6 +24,25 @@
       href="https://cdn-icons-png.flaticon.com/512/3075/3075977.png"
       type="image/png"
     />
+    <style>
+      .loader {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #dc2626;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+      }
+      .menu-loader {
+        width: 60px;
+        height: 60px;
+        border-top-color: var(--dark-red);
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
     <header class="py-4 shadow-lg sticky top-0 z-30">
@@ -52,18 +71,20 @@
             <span class="hidden sm:inline"
               >Olá, <span id="user-name" class="font-bold"></span>!</span
             >
-
+            <button id="my-orders-btn" class="text-sm font-bold text-red-800 hover:underline" title="Ver Meus Pedidos">
+              <i class="fa-solid fa-receipt"></i>
+              <span class="hidden sm:inline">Meus Pedidos</span>
+            </button>
             <a
               href="admin.html"
               id="admin-panel-btn"
               class="hidden font-display bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md hover:bg-blue-500 transition-all"
               title="Aceder ao Painel Administrativo"
             >
-              <i class="fa-solid fa-user-shield mr-2"></i>Painel
+              <i class="fa-solid fa-user-shield"></i>
             </a>
-
-            <button id="logout-btn">
-              Sair <i class="fa-solid fa-right-from-bracket ml-1"></i>
+            <button id="logout-btn" title="Sair">
+              <i class="fa-solid fa-right-from-bracket"></i>
             </button>
           </div>
 
@@ -100,7 +121,10 @@
     </nav>
 
     <main id="main-content" class="container mx-auto px-4 sm:px-6 py-12">
-      <section id="menu" class="space-y-16"></section>
+      <div id="menu-loader-container" class="flex justify-center items-center py-16">
+        <div class="loader menu-loader"></div>
+      </div>
+      <section id="menu" class="space-y-16 hidden"></section>
     </main>
 
     <div id="modal-backdrop" class="modal-backdrop hidden"></div>
@@ -120,13 +144,15 @@
         <div id="login-error-msg" class="error-message hidden"></div>
         <div>
           <label for="login-phone" class="form-label"
-            >Seu Telefone (com DDD)</label
+            >Seu Telefone (só números com DDD)</label
           >
           <input
             type="tel"
             id="login-phone"
             class="form-input"
             placeholder="Ex: 24999998888"
+            pattern="[0-9]{10,11}"
+            title="Digite 10 ou 11 números, incluindo o DDD."
             required
           />
         </div>
@@ -140,7 +166,10 @@
             required
           />
         </div>
-        <button type="submit" class="form-submit-btn">Entrar</button>
+        <button type="submit" class="form-submit-btn flex items-center justify-center gap-3">
+            <span class="btn-text">Entrar</span>
+            <div class="loader hidden"></div>
+        </button>
       </form>
       <p class="text-center mt-4 text-sm">
         Não tem uma conta?
@@ -170,18 +199,21 @@
             id="register-name"
             class="form-input"
             placeholder="Como podemos te chamar?"
+            minlength="2"
             required
           />
         </div>
         <div>
           <label for="register-phone" class="form-label"
-            >Seu Telefone (com DDD)</label
+            >Seu Telefone (só números com DDD)</label
           >
           <input
             type="tel"
             id="register-phone"
             class="form-input"
             placeholder="Será seu login"
+            pattern="[0-9]{10,11}"
+            title="Digite 10 ou 11 números, incluindo o DDD."
             required
           />
         </div>
@@ -194,15 +226,26 @@
             id="register-password"
             class="form-input"
             placeholder="Mínimo de 6 caracteres"
+            minlength="6"
             required
           />
         </div>
-        <button type="submit" class="form-submit-btn">Cadastrar</button>
+        <button type="submit" class="form-submit-btn flex items-center justify-center gap-3">
+            <span class="btn-text">Cadastrar</span>
+            <div class="loader hidden"></div>
+        </button>
       </form>
       <p class="text-center mt-4 text-sm">
         Já tem uma conta?
         <a href="#" id="switch-to-login" class="form-switch-link">Faça Login</a>
       </p>
+    </div>
+
+    <div id="my-orders-modal" class="modal-container hidden max-w-2xl">
+        <button id="close-orders-modal-btn" class="modal-close-btn" aria-label="Fechar">&times;</button>
+        <h2 class="section-title !text-3xl !text-left !border-none !pb-0 !mb-6">Meus Pedidos</h2>
+        <div id="orders-list-container" class="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+            </div>
     </div>
 
     <div id="guest-checkout-modal" class="modal-container hidden">
@@ -290,21 +333,23 @@
             class="block mb-2 font-bold text-red-800 font-display"
             >Seu Endereço:</label
           >
-          <input
-            type="text"
+          <textarea
             id="address"
             name="address"
+            rows="2"
             class="w-full p-3 border-2 border-yellow-500 rounded-lg focus:ring-red-500 focus:border-red-500 bg-white shadow-inner"
-            placeholder="Ex: Rua, Número, Bairro"
+            placeholder="Ex: Rua, Número, Bairro, Ponto de Referência"
+            minlength="10"
             required
-          />
+          ></textarea>
         </div>
         <button
           id="checkout-btn"
-          class="mt-6 w-full bg-red-600 text-yellow-300 py-3 rounded-lg text-lg font-bold"
+          class="mt-6 w-full bg-red-600 text-yellow-300 py-3 rounded-lg text-lg font-bold flex items-center justify-center gap-3"
           disabled
         >
-          <i class="fab fa-whatsapp" aria-hidden="true"></i> Finalizar Pedido
+          <span class="btn-text"><i class="fab fa-whatsapp"></i> Finalizar Pedido</span>
+          <div class="loader hidden"></div>
         </button>
       </div>
     </aside>
